@@ -1,0 +1,26 @@
+{
+    "format_version": 2,
+    "header": {
+        "name": "Level Perks",
+        "description": "Grants passive stat boosts (Resistance, Regeneration) based on player XP level.",
+        "uuid": "59b18081-8c93-4a75-a636-131aa3e68a23",
+        "version": [1, 0, 0],
+        "min_engine_version": [1, 21, 20]
+    },
+    "modules": [
+        {
+            "type": "script",
+            "language": "javascript",
+            "uuid": "f2892427-9c6a-4923-b26e-3630e4035237",
+            "entry": "scripts/index.js",
+            "version": [1, 0, 0]
+        }
+    ],
+    "capabilities": ["script_eval"],
+    "dependencies": [
+        {
+            "module_name": "@minecraft/server",
+            "version": "1.15.0"
+        }
+    ]
+}
