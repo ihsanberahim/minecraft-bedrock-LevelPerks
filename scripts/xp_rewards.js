@@ -1,4 +1,4 @@
-import { world } from "@minecraft/server";
+import { world, system } from "@minecraft/server";
 
 const BLOCK_XP = {
     "minecraft:log": 1,
@@ -42,5 +42,33 @@ world.afterEvents.entityDie.subscribe((event) => {
             const player = damageSource.damagingEntity;
             player.addExperience(xpAmount);
         }
+    }
+});
+
+world.beforeEvents.itemUseOn.subscribe((event) => {
+    const itemStack = event.itemStack;
+    if (event.source && itemStack && itemStack.typeId === "minecraft:bone_meal") {
+        const player = event.source;
+        const container = player.getComponent("minecraft:inventory")?.container;
+        if (!container) return;
+
+        const slot = player.selectedSlotIndex;
+        const countBefore = itemStack.amount;
+
+        system.run(() => {
+            try {
+                const itemAfter = container.getItem(slot);
+                const countAfter = itemAfter && itemAfter.typeId === "minecraft:bone_meal" ? itemAfter.amount : 0;
+
+                // If bone meal was consumed, the count in survival mode will decrease
+                if (countAfter < countBefore) {
+                    player.runCommandAsync("xp 1 @s").catch(err => 
+                        console.warn("[LevelPerks] Failed to award bone meal XP:", err)
+                    );
+                }
+            } catch (e) {
+                console.error("[LevelPerks] Error in bone meal consumption check:", e);
+            }
+        });
     }
 });
