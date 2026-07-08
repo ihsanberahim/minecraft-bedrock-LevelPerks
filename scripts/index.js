@@ -1,4 +1,5 @@
-﻿import { system, world } from '@minecraft/server';
+import './xp_rewards.js';
+import { system, world } from '@minecraft/server';
 
 export const EFFECT_DURATION = 140;
 export const TICK_INTERVAL = 100;
